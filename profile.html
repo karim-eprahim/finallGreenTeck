@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <!-- font awsome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!--Apex charts-->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid p-0">
+      <div class="d-flex">
+        <div>
+          <!-- sidebar -->
+          <div class="sidebar">
+            <div class="logo">Logo</div>
+            <ul class="menu">
+              <li class="rounded-pill">
+                <a href="/index.html">
+                  <i class="fa-solid fa-gauge-high"></i>
+                  <span>Dashboard</span>
+                </a>
+              </li>
+              <li class="rounded-pill">
+                <a href="#">
+                  <i class="fa-solid fa-chart-pie"></i> <span>Analytics</span>
+                </a>
+              </li>
+              <li class="rounded-pill">
+                <a href="/plants.html">
+                  <i class="fa-solid fa-seedling"></i> <span>Plants</span>
+                </a>
+              </li>
+              <li class="rounded-pill">
+                <a href="/signin.html">
+                  <i class="fa-solid fa-file"></i> <span>SignIn</span>
+                </a>
+              </li>
+              <li class="rounded-pill">
+                <a href="/profile.html">
+                  <i class="fa-solid fa-user active"></i> <span>Profile</span>
+                </a>
+              </li>
+              <li class="rounded-pill">
+                <a href="/control.html">
+                  <i class="fa-solid fa-gear"></i> <span>Control</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="w-100">
+          <div class="profile w-100">
+            <div class="w-100">
+              <div class="p-0">
+                <!-- Profile widget -->
+                <div class="bg-main">
+                  <div class="px-4 shadow pt-0 pb-5 cover">
+                    <div class="media align-items-end profile-head">
+                      <div class="profile-info mr-3">
+                        <img
+                          src="/images/user.jpg"
+                          alt="..."
+                          width="130"
+                          class="rounded mb-2 img-thumbnail"
+                        />
+                        <div class="media-body text-white">
+                          <h4 class="mt-0 mb-0">Mark Williams</h4>
+                          <p class="small mb-4">
+                            <i class="fa-solid fa-user mx-2 mt-2"></i>Admin
+                          </p>
+                        </div>
+                      </div>
+                      <a
+                        href="#"
+                        class="btn btn-success btn-sm btn-block editbtn mb-5"
+                        >Edit profile</a
+                      >
+                    </div>
+                    <i class="sidebtn d-sm-none d-flex flex-column justify-content-center align-items-center btn gap-1 btn-light border">
+                      <span></span>
+                      <span></span>
+                      <span></span>
+                    </i>
+                  </div>
+                  <div class="bg-white shadow rounded m-3 p-4">
+                    <ul
+                      class="list-inline mb-0 d-flex justify-content-around justify-content-sm-start gap-sm-3 text-center"
+                    >
+                      <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">2</h5>
+                        <small class="text-muted">
+                          <i class="fa-brands fa-pagelines me-1"></i>Plants
+                        </small>
+                      </li>
+                      <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">745</h5>
+                        <small class="text-muted">
+                          <i class="fas fa-user me-1"></i>Users</small
+                        >
+                      </li>
+                      <li class="list-inline-item">
+                        <h5 class="font-weight-bold mb-0 d-block">340</h5>
+                        <small class="text-muted">
+                          <i class="fas fa-user me-1"></i>Admins</small
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                  <div class="px-4 bg-white shadow m-3 rounded py-3">
+                    <h5 class="mb-0">Profile Info</h5>
+                    <div class="p-4 rounded">
+                      <p>
+                        <span class="fw-bold me-2">Name:</span>Karim Ebrahim Ali
+                      </p>
+                      <p>
+                        <span class="fw-bold me-2">Email:</span
+                        >KarimEbrahim@gmail.com
+                      </p>
+                      <p>
+                        <span class="fw-bold me-2">Password:</span>12345678!
+                      </p>
+                      <p>
+                        <span class="fw-bold me-2">Phone:</span>+201023609534
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/bootstrap.js"></script>
+    <script src="js/master.js" type="module"></script>
+  </body>
+</html>

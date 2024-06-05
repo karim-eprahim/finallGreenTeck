@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GreenTech</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <!-- font awsome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <!--Apex charts-->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </head>
+
+  <body>
+    <!-- sidebar  -->
+    <div class="sidebar">
+      <div class="logo">Logo</div>
+      <ul class="menu">
+        <li class="rounded-pill">
+          <a href="/index.html">
+            <i class="fa-solid fa-gauge-high"></i>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="rounded-pill">
+          <a href="#">
+            <i class="fa-solid fa-chart-pie"></i> <span>Analytics</span>
+          </a>
+        </li>
+        <li class="rounded-pill">
+          <a href="/plants.html">
+            <i class="fa-solid fa-seedling"></i> <span>Plants</span>
+          </a>
+        </li>
+        <li class="rounded-pill">
+          <a href="/signin.html">
+            <i class="fa-solid fa-file"></i> <span>SignIn</span>
+          </a>
+        </li>
+        <li class="rounded-pill">
+          <a href="/profile.html">
+            <i class="fa-solid fa-user"></i> <span>Profile</span>
+          </a>
+        </li>
+        <li class="rounded-pill active">
+          <a href="/control.html">
+            <i class="fa-solid fa-gear"></i> <span>Control</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- main-content  -->
+    <div class="control main-content container-fluid px-4">
+      <div class="wellcome d-flex py-4 justify-content-between">
+        <div class="d-flex justify-content-center align-items-center gap-3">
+          <img
+            src="/images/user.jpg"
+            class="rounded-circle"
+            width="40px"
+            height="40px"
+            alt=""
+          />
+          <h1 class="fs-4 m-0">
+            Sumarti
+            <span class="badge rounded-pill text-bg-success">User</span>
+          </h1>
+        </div>
+        <div class="notification d-flex justify-content-center gap-1">
+          <i class="fa-solid fa-bell btn btn-light border"></i>
+          <i
+            class="sidebtn d-sm-none d-flex flex-column justify-content-center align-items-center btn gap-1 btn-light border"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </i>
+          <!-- alert  -->
+          <div class="alerts">
+            <div
+              class="alert alert-primary d-flex gap-1 align-items-center m-1"
+              role="alert"
+            >
+              <i class="fa-solid fa-triangle-exclamation"></i>
+              <div>An example alert with an icon</div>
+              <button
+                type="button"
+                class="btn-close btn-sm"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- control  -->
+      <div class="control py-4">
+        <h4 class="fs-4">Control</h4>
+        <div class="row py-3">
+          <!-- thermostat -->
+          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+            <div class="card border-0 shadow">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-temperature-three-quarters icon"></i>
+                  Thermostat
+                </h5>
+                <div
+                  class="card-text my-3 d-flex justify-content-center align-items-center"
+                >
+                  <div class="controls-btn btn-group gap-2" id="thermo-btns">
+                    <div class="control-btn btn bg-white shadow rounded" href="thermo-btn" id="thermo-manual">Manual</div>
+                    <div class="control-btn btn bg-white shadow rounded" href="auto-btn" id="thermo-auto">Auto</div>
+                  </div>
+                </div>
+                <!-- control-sitting  -->
+                <div class="controls-sit thermo-sits">
+                  <div
+                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content" id="thermo-btn"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="thermostatSwitch"
+                    />
+                    <label class="form-check-label" for="thermostatSwitch"
+                      >ON</label
+                    >
+                  </div>
+                  <div class="mb-3 w-75 mx-auto control-content" id="auto-btn">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="thermostatautovalue"
+                      value="25.9"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div
+                  class="degree my-3 d-flex justify-content-around align-items-center"
+                >
+                  <p class="fs-5">Sensor Reading:</p>
+                  <p class="fs-2 temperature">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- light -->
+          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+            <div class="card border-0 shadow">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-lightbulb icon text-warning"></i>
+                  Light
+                </h5>
+                <div
+                  class="card-text my-3 d-flex justify-content-center align-items-center"
+                >
+                  <div class="controls-btn btn-group gap-2" id="light-btns">
+                    <div class="control-btn btn bg-white shadow rounded" href="light-btn" id="light-manual">Manual</div>
+                    <div class="control-btn btn bg-white shadow rounded" href="auto-light-btn" id="light-auto">Auto</div>
+                  </div>
+                </div>
+                <!-- control-sitting  -->
+                <div class="controls-sit .light-content">
+                  <div
+                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content light-content" id="light-btn"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="lightSwitch"
+                    />
+                    <label class="form-check-label" for="lightSwitch"
+                      >ON</label
+                    >
+                  </div>
+                  <div class="mb-3 w-75 mx-auto control-content light-content" id="auto-light-btn">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="lightautovalue"
+                      value="25.9"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div
+                  class="degree my-3 d-flex justify-content-around align-items-center"
+                >
+                  <p class="fs-5">Sensor Reading:</p>
+                  <p class="fs-2 light">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- irrigation -->
+          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+            <div class="card border-0 shadow">
+              <div class="card-body">
+                <h5 class="card-title">
+                  <i class="fa-solid fa-faucet-drip icon text-primary"></i>
+                  Irrigation System
+                </h5>
+                <div
+                  class="card-text my-3 d-flex justify-content-center align-items-center"
+                >
+                  <div class="controls-btn btn-group gap-2" id="irrigation-btns">
+                    <div class="control-btn btn bg-white shadow rounded" href="irrigation-btn" id="irrigation-manual">Manual</div>
+                    <div class="control-btn btn bg-white shadow rounded" href="auto-irrigation-btn" id="irrigation-auto">Auto</div>
+                  </div>
+                </div>
+                <!-- control-sitting  -->
+                <div class="controls-sit .irrigation-content">
+                  <div
+                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content irrigation-content" id="irrigation-btn"
+                  >
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="irrigationSwitch"
+                    />
+                    <label class="form-check-label" for="irrigationSwitch"
+                      >OFF</label
+                    >
+                  </div>
+                  <div class="mb-3 w-75 mx-auto control-content irrigation-content" id="auto-irrigation-btn">
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="irrigationautovalue"
+                      value="25.9"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div
+                  class="degree my-3 d-flex justify-content-around align-items-center"
+                >
+                  <p class="fs-5">Sensor Reading:</p>
+                  <p class="fs-2 humidity">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/control.js" type="module"></script>
+  </body>
+</html>
