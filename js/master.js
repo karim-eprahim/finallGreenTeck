@@ -6,6 +6,11 @@ sidebtn.addEventListener("click", () => {
   sidebar.classList.toggle("sidactive");
 });
 
+async function getData() {
+  return await Promise.resolve("i made it")
+}
+const data = getData
+console.log(data)
 // Create a new Date object
 var currentDate = new Date();
 var dayOfWeek = currentDate.getDay();

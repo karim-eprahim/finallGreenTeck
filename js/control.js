@@ -1,4 +1,4 @@
-// get the reading from firebase
+// Firebase imports and initialization
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import {
   getDatabase,
@@ -13,320 +13,195 @@ const appSettings = {
 const app = initializeApp(appSettings);
 const database = getDatabase(app);
 let sensorData = {};
+let controlData = {};
 
-function fetchData() {
-  const sensorsRef = ref(database, "sensors");
-
-  onValue(sensorsRef, (snapshot) => {
-    sensorData = snapshot.val();
-    getReading();
+// Utility functions
+function fetchData(path, callback) {
+  const dataRef = ref(database, path);
+  onValue(dataRef, (snapshot) => {
+    callback(snapshot.val());
   });
 }
 
-fetchData();
-setInterval(fetchData, 1000);
-
-// Elements
-let temperatureReading = document.querySelector(".temperature");
-let lightReading = document.querySelector(".light");
-let humidityReading = document.querySelector(".humidity");
-
-function getReading() {
-  let temperature = sensorData["temperature"];
-  let humidity = sensorData["humidity"];
-  let lightIntensity = sensorData["light-intensity"];
-  let airquality = sensorData["airquality"];
-  // setReading
-  temperatureReading.innerHTML = `${temperature} <span class="fs-4">&#8451;</span>`;
-  lightReading.innerHTML = `${lightIntensity} <span class="fs-4">&#8451;</span>`;
-  humidityReading.innerHTML = `${humidity} <span class="fs-4">&#8451;</span>`;
+function setElementContent(selector, content) {
+  document.querySelector(selector).innerHTML = content;
 }
 
-// show and hide control
-fetchControlData();
-let controlData = {};
+function updateControlState(control, elementIds) {
+  if (control["auto"]) {
+    document.getElementById(elementIds.auto).classList.add("active");
+    document.getElementById(elementIds.manual).classList.remove("active");
+    document.getElementById(elementIds.autoBtn).classList.add("show");
+    document.getElementById(elementIds.manualBtn).classList.remove("show");
+  } else {
+    document.getElementById(elementIds.manual).classList.add("active");
+    document.getElementById(elementIds.auto).classList.remove("active");
+    document.getElementById(elementIds.manualBtn).classList.add("show");
+    document.getElementById(elementIds.autoBtn).classList.remove("show");
+  }
+}
 
-function fetchControlData() {
-  const controlsRef = ref(database, "controls");
+function addClickListener(elementId, path, value, elementIds) {
+  document.getElementById(elementId).addEventListener("click", function (event) {
+    event.preventDefault();
+    set(ref(database, path), value);
+    updateControlState({ auto: value }, elementIds);
+  });
+}
 
-  onValue(controlsRef, (snapshot) => {
-    controlData = snapshot.val();
+function addCheckboxListener(elementId, path) {
+  document.getElementById(elementId).addEventListener("change", function () {
+    set(ref(database, path), this.checked);
+  });
+}
+
+function initializeSwitch(controlPath, elementId) {
+  const element = document.getElementById(elementId);
+  element.checked = controlData[controlPath.split('/')[1]]["manual-control"];
+  if(elementId == "leftMoisture"){
+    element.checked = controlData[controlPath.split('/')[1]]["soil-moisture-left"]["manual-control"];
+  }
+}
+
+function otherButtonListeners() {
+  // fan button 
+  Array.from(document.querySelectorAll("#fan")).map((e)=>{
+    e.addEventListener("change", function() {
+      set(ref(database, "controls/y-fan-hood-control/fan-manual"), this.checked);
+    });
+  })
+
+  // Hood button
+  // document.getElementById("hood").addEventListener("change", function() {
+  //   set(ref(database, "controls/y-fan-hood-control/hood-manual"), this.checked);
+  // });
+  Array.from(document.querySelectorAll("#hood")).map((e)=>{
+    e.addEventListener("change", function() {
+      set(ref(database, "controls/y-fan-hood-control/hood-manual"), this.checked);
+    });
+  })
+
+  // Irrigation buttons
+  document.getElementById("rightMoisture").addEventListener("change", function() {
+    set(ref(database, "controls/soil-moisture/soil-moisture-right/manual-control"), this.checked);
+  });
+}
+function cehckForOtherbuttonListeners(){
+
+  Array.from(document.querySelectorAll("#fan")).map((e)=>{
+    e.checked = controlData["controls/y-fan-hood-control/fan-manual".split('/')[1]]["fan-manual"];
+  })
+
+  Array.from(document.querySelectorAll("#hood")).map((e)=>{
+    e.checked = controlData["controls/y-fan-hood-control/hood-manual".split('/')[1]]["hood-manual"];
+  })
+  // const curtain = document.getElementById("hood");
+  // curtain.checked = controlData["controls/y-fan-hood-control/hood-manual".split('/')[1]]["hood-manual"];
+
+  const waterDrain = document.getElementById("rightMoisture");
+  waterDrain.checked = controlData["controls/soil-moisture/soil-moisture-right/manual-control".split('/')[1]]["soil-moisture-right"]["manual-control"];
+}
+
+function sendValueToFirebase(id, path) {
+  const autoValue = document.getElementById(id).value;
+  set(ref(database, path), autoValue);
+}
+
+// Fetch and update readings
+function getReading() {
+  setElementContent(".temperature", `${sensorData["temperature"]} <span class="fs-4">&#8451;</span>`);
+  setElementContent(".light", `${sensorData["light-intensity"]} <span class="fs-4">&#8451;</span>`);
+  setElementContent(".humidity", `${sensorData["humidity"]} <span class="fs-4">&#8451;</span>`);
+}
+
+// Fetch and update control states
+function setDataControl() {
+  const controls = [
+    {
+      control: controlData["temperature"],
+      elements: { auto: "thermo-auto", manual: "thermo-manual", autoBtn: "auto-btn", manualBtn: "thermo-btn" },
+      autoPath: "controls/temperature/auto",
+      // manual btn 
+      manualControlId: "tempHeater",
+      manualControlPath: "controls/temperature/manual-control",
+      // auto value 
+      autoControlId:"autoTemperatureValue",
+      autoControlPath:"controls/temperature/auto-value",
+    },
+    {
+      control: controlData["light"],
+      elements: { auto: "light-auto", manual: "light-manual", autoBtn: "auto-light-btn", manualBtn: "light-btn" },
+      autoPath: "controls/light/auto",
+      // manual btn 
+      manualControlId: "lightSwitch",
+      manualControlPath: "controls/light/manual-control",
+      // auto value 
+      autoControlId:"lightautovalue",
+      autoControlPath:"controls/light/auto-value",
+    },
+    {
+      control: controlData["soil-moisture"],
+      elements: { auto: "irrigation-auto", manual: "irrigation-manual", autoBtn: "auto-irrigation-btn", manualBtn: "irrigation-btn" },
+      autoPath: "controls/soil-moisture/auto",
+      // manual btn 
+      manualControlId: "leftMoisture",
+      manualControlPath: "controls/soil-moisture/soil-moisture-left/manual-control",
+      // auto value 
+      autoControlId:"soilMoistureAutoValue",
+      autoControlPath:"controls/soil-moisture/auto-value",
+    },
+    {
+      control: controlData["humidity"],
+      elements: { auto: "humidity-auto", manual: "humidity-manual", autoBtn: "auto-humidity-value", manualBtn: "humidity-manual-buttons" },
+      autoPath: "controls/humidity/auto",
+      // manual btn 
+      manualControlId: "humidifier",
+      manualControlPath: "controls/humidity/manual-control",
+      // auto value 
+      autoControlId:"humidityAutoValue",
+      autoControlPath:"controls/humidity/auto-value",
+    },
+    {
+      control: controlData["Air Quality"],
+      elements: { auto: "airQuality-auto", manual: "airQuality-manual", autoBtn: "auto-airQuality-value", manualBtn: "airQuality-manual-buttons" },
+      autoPath: "controls/Air Quality/auto",
+      // manual btn 
+      manualControlId: "humidifier",
+      manualControlPath: "controls/humidity/manual-control",
+      // auto value 
+      autoControlId:"humidityAutoValue",
+      autoControlPath:"controls/Air Quality/auto-value",
+    }
+  ];
+
+  controls.forEach(({ control, elements, autoPath, manualControlId, manualControlPath ,autoControlId,autoControlPath }) => {
+    updateControlState(control, elements);
+    addClickListener(elements.auto, autoPath, true, elements);
+    addClickListener(elements.manual, autoPath, false, elements);
+    // manual btn 
+    addCheckboxListener(manualControlId, manualControlPath);
+    initializeSwitch(manualControlPath, manualControlId);
+    // send auto value
+    sendValueToFirebase(autoControlId, autoControlPath);
+  });
+
+  // other buttons 
+  otherButtonListeners();
+  cehckForOtherbuttonListeners()
+}
+
+// Fetch data at intervals
+function initializeDataFetching() {
+  fetchData("sensors", (data) => {
+    sensorData = data;
+    getReading();
+  });
+  fetchData("controls", (data) => {
+    controlData = data;
     setDataControl();
   });
 }
 
-setInterval(fetchControlData, 1000);
-
-function setDataControl() {
-               // ............... 
-               // for thermostat
-               // .................. 
-
-  if (controlData["thermostat"]["auto"] == true) {
-    document.getElementById("thermo-auto").classList.add("active");
-    document.getElementById("auto-btn").classList.add("show");
-    document.getElementById("thermo-btn").classList.remove("show");
-  } else {
-    document.getElementById("thermo-manual").classList.add("active");
-    document.getElementById("thermo-btn").classList.add("show");
-    document.getElementById("auto-btn").classList.remove("show");
-  }
-
-  document.getElementById("thermo-auto").addEventListener("click", function (event) {
-    event.preventDefault();
-    // Auto True 
-    const thermostatAutoValueRef = ref(database, "controls/thermostat/auto");
-    set(thermostatAutoValueRef, true).then(() => {
-      console.log("atuto:true");
-    }).catch((error) => {
-      console.error("Error updating 'auto' for 'thermostat'", error);
-    });
-    showAutoManulaContentThermo();
-  });
-
-  document.getElementById("thermo-manual").addEventListener("click", function (event) {
-    event.preventDefault();
-    // Auto false
-    const thermostatAutoValueRef = ref(database, "controls/thermostat/auto");
-    set(thermostatAutoValueRef, false).then(() => {
-      console.log("Successfully updated 'auto' for 'thermostat' control to false.");
-    }).catch((error) => {
-      console.error("Error updating 'auto' for 'thermostat' control:", error);
-    });
-    showAutoManulaContentThermo();
-  });
-
-  // Event listener for the checkbox
-  document.getElementById("thermostatSwitch").addEventListener("change", function () {
-    const thermostatManualControlRef = ref(database, "controls/thermostat/manual-control");
-    set(thermostatManualControlRef, document.getElementById("thermostatSwitch").checked).then(() => {
-      console.log("Successfully updated 'manual-control' for 'thermostat' control.");
-    }).catch((error) => {
-      console.error("Error updating 'manual-control' for 'thermostat' control:", error);
-    });
-    thermoManual(); 
-  });
-
-  thermoManual(); 
-
-
-          // ............... 
-        // for light
-        // ............... 
-
-
-
-        if (controlData["light"]["auto"] == true) {
-          document.getElementById("light-auto").classList.add("active");
-          document.getElementById("auto-light-btn").classList.add("show");
-          document.getElementById("light-btn").classList.remove("show");
-        } else {
-          document.getElementById("light-manual").classList.add("active");
-          document.getElementById("light-btn").classList.add("show");
-          document.getElementById("auto-light-btn").classList.remove("show");
-        }
-      
-        document.getElementById("light-auto").addEventListener("click", function (event) {
-          event.preventDefault();
-          // Auto True 
-          const lightstatAutoValueRef = ref(database, "controls/light/auto");
-          set(lightstatAutoValueRef, true).then(() => {
-            console.log("atuto:true");
-          }).catch((error) => {
-            console.error("Error updating 'auto' for 'thermostat'", error);
-          });
-          showAutoManulaContentLight();
-        });
-      
-        document.getElementById("light-manual").addEventListener("click", function (event) {
-          event.preventDefault();
-          // Auto false
-          const lightstatAutoValueRef = ref(database, "controls/light/auto");
-          set(lightstatAutoValueRef, false).then(() => {
-            console.log("Successfully updated 'auto' for 'thermostat' control to false.");
-          }).catch((error) => {
-            console.error("Error updating 'auto' for 'thermostat' control:", error);
-          });
-          showAutoManulaContentLight();
-        });
-      
-        // Event listener for the checkbox
-        document.getElementById("lightSwitch").addEventListener("change", function () {
-          const thermostatManualControlRef = ref(database, "controls/light/manual-control");
-          set(thermostatManualControlRef, document.getElementById("lightSwitch").checked).then(() => {
-            console.log("Successfully updated 'manual-control' for 'light' control.");
-          }).catch((error) => {
-            console.error("Error updating 'manual-control' for 'light' control:", error);
-          });
-          lightManual(); 
-        });
-      
-        lightManual();
-
-
-        // ............. 
-        // for Irrigation system
-        // ............. 
-
-        if (controlData["irrigation"]["auto"] == true) {
-          document.getElementById("irrigation-auto").classList.add("active");
-          document.getElementById("auto-irrigation-btn").classList.add("show");
-          document.getElementById("irrigation-btn").classList.remove("show");
-        } else {
-          document.getElementById("irrigation-manual").classList.add("active");
-          document.getElementById("irrigation-btn").classList.add("show");
-          document.getElementById("auto-irrigation-btn").classList.remove("show");
-        }
-      
-        document.getElementById("irrigation-auto").addEventListener("click", function (event) {
-          event.preventDefault();
-          // Auto True 
-          const irrigationstatAutoValueRef = ref(database, "controls/irrigation/auto");
-          set(irrigationstatAutoValueRef, true).then(() => {
-            console.log("atuto:true");
-          }).catch((error) => {
-            console.error("Error updating 'auto' for 'thermostat'", error);
-          });
-          showAutoManulaContentIrrigation();
-        });
-      
-        document.getElementById("irrigation-manual").addEventListener("click", function (event) {
-          event.preventDefault();
-          // Auto false
-          const irrigationstatAutoValueRef = ref(database, "controls/irrigation/auto");
-          set(irrigationstatAutoValueRef, false).then(() => {
-            console.log("Successfully updated 'auto' for 'thermostat' control to false.");
-          }).catch((error) => {
-            console.error("Error updating 'auto' for 'thermostat' control:", error);
-          });
-          showAutoManulaContentIrrigation();
-        });
-      
-        // Event listener for the checkbox
-        document.getElementById("irrigationSwitch").addEventListener("change", function () {
-          const thermostatManualControlRef = ref(database, "controls/irrigation/manual-control");
-          set(thermostatManualControlRef, document.getElementById("irrigationSwitch").checked).then(() => {
-            console.log("Successfully updated 'manual-control' for 'irrigation' control.");
-          }).catch((error) => {
-            console.error("Error updating 'manual-control' for 'irrigation' control:", error);
-          });
-          irrigationManual(); 
-        });
-      
-        irrigationManual();
-}
-
-
-// thermo functions 
-function showAutoManulaContentThermo() {
-  document.getElementById("thermo-btns").addEventListener("click", function (event) {
-    if (event.target.classList.contains("control-btn")) {
-      event.preventDefault();
-
-      document.querySelectorAll("#thermo-btns .control-btn").forEach(function (tab) {
-        tab.classList.remove("active");
-      });
-
-      document.querySelectorAll(".thermo-sits .control-content").forEach(function (tabPane) {
-        tabPane.classList.remove("show");
-      });
-
-      // Add 'active' class to the clicked tab and corresponding tab pane
-      event.target.classList.add("active");
-
-      if (event.target.id == "auto-btn") {
-        document.getElementById("auto-btn").classList.add("show");
-      } else {
-        document.getElementById("thermo-btn").classList.add("show");
-      }
-
-      console.log(event.target.id);
-    }
-  });
-}
-function thermoManual() {
-  var label = document.querySelector('.form-check-label[for="thermostatSwitch"]');
-  if (controlData["thermostat"]["manual-control"] == true) {
-    thermostatSwitch.checked = true;
-    label.textContent = 'ON';
-  } else {
-    thermostatSwitch.checked = false;
-    label.textContent = 'OFF';
-  }
-}
-
-// light functions 
-function showAutoManulaContentLight() {
-  document.getElementById("light-btns").addEventListener("click", function (event) {
-    if (event.target.classList.contains("control-btn")) {
-      event.preventDefault();
-
-      document.querySelectorAll("#light-btns .control-btn").forEach(function (tab) {
-        tab.classList.remove("active");
-      });
-
-      document.querySelectorAll(".light-content").forEach(function (tabPane) {
-        tabPane.classList.remove("show");
-      });
-
-      // Add 'active' class to the clicked tab and corresponding tab pane
-      event.target.classList.add("active");
-
-      if (event.target.id == "auto-btn") {
-        document.getElementById("auto-btn").classList.add("show");
-      } else {
-        document.getElementById("thermo-btn").classList.add("show");
-      }
-
-      console.log(event.target.id);
-    }
-  });
-}
-function lightManual() {
-  var label = document.querySelector('.form-check-label[for="lightSwitch"]');
-  if (controlData["light"]["manual-control"] == true) {
-    lightSwitch.checked = true;
-    label.textContent = 'ON';
-  } else {
-    lightSwitch.checked = false;
-    label.textContent = 'OFF';
-  }
-}
-
-// Irrigation system functions 
-function showAutoManulaContentIrrigation() {
-  document.getElementById("irrigation-btns").addEventListener("click", function (event) {
-    if (event.target.classList.contains("control-btn")) {
-      event.preventDefault();
-
-      document.querySelectorAll("#irrigation-btns .control-btn").forEach(function (tab) {
-        tab.classList.remove("active");
-      });
-
-      document.querySelectorAll(".irrigation-content").forEach(function (tabPane) {
-        tabPane.classList.remove("show");
-      });
-
-      // Add 'active' class to the clicked tab and corresponding tab pane
-      event.target.classList.add("active");
-
-      if (event.target.id == "auto-btn") {
-        document.getElementById("auto-btn").classList.add("show");
-      } else {
-        document.getElementById("thermo-btn").classList.add("show");
-      }
-
-      console.log(event.target.id);
-    }
-  });
-}
-function irrigationManual() {
-  var label = document.querySelector('.form-check-label[for="irrigationSwitch"]');
-  if (controlData["irrigation"]["manual-control"] == true) {
-    irrigationSwitch.checked = true;
-    label.textContent = 'ON';
-  } else {
-    irrigationSwitch.checked = false;
-    label.textContent = 'OFF';
-  }
-}
+// Initialize
+initializeDataFetching();
+setInterval(initializeDataFetching, 1000);

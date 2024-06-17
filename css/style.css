@@ -625,6 +625,18 @@ body .apexcharts-tooltip.apexcharts-theme-light {
 .controls-sit .show{
   display: flex!important;
 }
+/* .degree{
+  position: relative;
+  bottom: -45px;
+  right: -236px;
+  width: 100px;
+  height: 95px;
+  background-color: lightgreen;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 
 
 /* for plants  */

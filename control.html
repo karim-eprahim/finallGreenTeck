@@ -101,159 +101,216 @@
         </div>
       </div>
 
-      <!-- control  -->
-      <div class="control py-4">
-        <h4 class="fs-4">Control</h4>
-        <div class="row py-3">
-          <!-- thermostat -->
-          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
-            <div class="card border-0 shadow">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <i class="fa-solid fa-temperature-three-quarters icon"></i>
-                  Thermostat
-                </h5>
-                <div
-                  class="card-text my-3 d-flex justify-content-center align-items-center"
-                >
-                  <div class="controls-btn btn-group gap-2" id="thermo-btns">
-                    <div class="control-btn btn bg-white shadow rounded" href="thermo-btn" id="thermo-manual">Manual</div>
-                    <div class="control-btn btn bg-white shadow rounded" href="auto-btn" id="thermo-auto">Auto</div>
-                  </div>
-                </div>
-                <!-- control-sitting  -->
-                <div class="controls-sit thermo-sits">
-                  <div
-                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content" id="thermo-btn"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="thermostatSwitch"
-                    />
-                    <label class="form-check-label" for="thermostatSwitch"
-                      >ON</label
-                    >
-                  </div>
-                  <div class="mb-3 w-75 mx-auto control-content" id="auto-btn">
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="thermostatautovalue"
-                      value="25.9"
-                      disabled
-                    />
-                  </div>
-                </div>
-                <div
-                  class="degree my-3 d-flex justify-content-around align-items-center"
-                >
-                  <p class="fs-5">Sensor Reading:</p>
-                  <p class="fs-2 temperature">0</p>
-                </div>
-              </div>
+<!-- control  -->
+<div class="control py-4">
+  <h4 class="fs-4">Control</h4>
+  <div class="row py-3">
+    <!-- thermostat -->
+    <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+      <div class="card border-0 shadow h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fa-solid fa-temperature-three-quarters icon"></i>
+            Thermostat
+          </h5>
+          <div class="card-text my-3 d-flex justify-content-center align-items-center">
+            <div class="controls-btn btn-group gap-2" id="thermo-btns">
+              <div class="control-btn btn bg-white shadow rounded" id="thermo-manual">Manual</div>
+              <div class="control-btn btn bg-white shadow rounded" id="thermo-auto">Auto</div>
             </div>
           </div>
-          <!-- light -->
-          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
-            <div class="card border-0 shadow">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <i class="fa-solid fa-lightbulb icon text-warning"></i>
-                  Light
-                </h5>
-                <div
-                  class="card-text my-3 d-flex justify-content-center align-items-center"
-                >
-                  <div class="controls-btn btn-group gap-2" id="light-btns">
-                    <div class="control-btn btn bg-white shadow rounded" href="light-btn" id="light-manual">Manual</div>
-                    <div class="control-btn btn bg-white shadow rounded" href="auto-light-btn" id="light-auto">Auto</div>
-                  </div>
-                </div>
-                <!-- control-sitting  -->
-                <div class="controls-sit .light-content">
-                  <div
-                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content light-content" id="light-btn"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="lightSwitch"
-                    />
-                    <label class="form-check-label" for="lightSwitch"
-                      >ON</label
-                    >
-                  </div>
-                  <div class="mb-3 w-75 mx-auto control-content light-content" id="auto-light-btn">
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="lightautovalue"
-                      value="25.9"
-                      disabled
-                    />
-                  </div>
-                </div>
-                <div
-                  class="degree my-3 d-flex justify-content-around align-items-center"
-                >
-                  <p class="fs-5">Sensor Reading:</p>
-                  <p class="fs-2 light">0</p>
-                </div>
+          <!-- control-sitting  -->
+          <div class="controls-sit thermo-sits">
+            <!-- manual  -->
+            <div class="form-check px-4 form-switch d-flex flex-column align-items-center control-content gap-2" id="thermo-btn">
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="tempHeater" />
+                <label class="form-check-label" for="tempHeater">Heater</label>
+              </div>
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="fan" />
+                <label class="form-check-label" for="fan">Fan</label>
+              </div>
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="hood" />
+                <label class="form-check-label" for="hood">Hood</label>
               </div>
             </div>
+            <!-- auto  -->
+            <div class="mb-3 w-75 mx-auto control-content" id="auto-btn">
+              <input type="number" class="form-control" id="autoTemperatureValue" value="25.9" />
+            </div>
           </div>
-          <!-- irrigation -->
-          <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
-            <div class="card border-0 shadow">
-              <div class="card-body">
-                <h5 class="card-title">
-                  <i class="fa-solid fa-faucet-drip icon text-primary"></i>
-                  Irrigation System
-                </h5>
-                <div
-                  class="card-text my-3 d-flex justify-content-center align-items-center"
-                >
-                  <div class="controls-btn btn-group gap-2" id="irrigation-btns">
-                    <div class="control-btn btn bg-white shadow rounded" href="irrigation-btn" id="irrigation-manual">Manual</div>
-                    <div class="control-btn btn bg-white shadow rounded" href="auto-irrigation-btn" id="irrigation-auto">Auto</div>
+          <div class="degree my-3 d-flex justify-content-around align-items-center">
+            <p class="fs-5">Sensor Reading:</p>
+            <p class="fs-2 temperature">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- light -->
+    <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+      <div class="card border-0 shadow h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fa-solid fa-lightbulb icon text-warning"></i>
+            Light
+          </h5>
+          <div class="card-text my-3 d-flex justify-content-center align-items-center">
+            <div class="controls-btn btn-group gap-2" id="light-btns">
+              <div class="control-btn btn bg-white shadow rounded" id="light-manual">Manual</div>
+              <div class="control-btn btn bg-white shadow rounded" id="light-auto">Auto</div>
+            </div>
+          </div>
+          <!-- control-sitting  -->
+          <div class="controls-sit light-content">
+            <!-- manual  -->
+            <div class="form-check px-4 form-switch d-flex flex-column align-items-center gap-3 control-content light-content gap-2" id="light-btn">
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="lightSwitch" />
+                <label class="form-check-label" for="lightSwitch">Curtain 1</label>
+              </div>
+            </div>
+
+            <div class="mb-3 w-75 mx-auto control-content light-content" id="auto-light-btn">
+              <input type="number" class="form-control" id="lightautovalue" value="25.9" />
+            </div>
+          </div>
+          <!-- auto  -->
+          <div class="degree my-3 d-flex justify-content-around align-items-center">
+            <p class="fs-5">Sensor Reading:</p>
+            <p class="fs-2 light">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- irrigation -->
+    <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+      <div class="card border-0 shadow h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fa-solid fa-faucet-drip icon text-primary"></i>
+            Irrigation System
+          </h5>
+          <div class="card-text my-3 d-flex justify-content-center align-items-center">
+            <div class="controls-btn btn-group gap-2" id="irrigation-btns">
+              <div class="control-btn btn bg-white shadow rounded" id="irrigation-manual">Manual</div>
+              <div class="control-btn btn bg-white shadow rounded" id="irrigation-auto">Auto</div>
+            </div>
+          </div>
+          <!-- control-sitting  -->
+          <div class="controls-sit irrigation-content">
+            <div class="form-check px-4 form-switch d-flex flex-column align-items-center control-content irrigation-content gap-2" id="irrigation-btn">
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="leftMoisture" />
+                <label class="form-check-label" for="leftMoisture">left</label>
+              </div>
+              <div class="d-flex justify-content-between w-100">
+                <input class="form-check-input" type="checkbox" id="rightMoisture" />
+                <label class="form-check-label" for="rightMoisture">right</label>
+              </div>
+            </div>
+
+            <div class="mb-3 w-75 mx-auto control-content irrigation-content" id="auto-irrigation-btn">
+              <input type="number" class="form-control" id="soilMoistureAutoValue" value="25.9" disabled />
+            </div>
+          </div>
+          <div class="degree my-3 d-flex justify-content-around align-items-center">
+            <p class="fs-5">Sensor Reading:</p>
+            <p class="fs-2 humidity">0</p>
+          </div>
+        </div>
+      </div>
+    </div>
+        <!-- humidity -->
+        <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+          <div class="card border-0 shadow h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fa-solid fa-wind icon text-info"></i>
+                Humidity
+              </h5>
+              <div class="card-text my-3 d-flex justify-content-center align-items-center">
+                <div class="controls-btn btn-group gap-2" id="thermo-btns">
+                  <div class="control-btn btn bg-white shadow rounded" id="humidity-manual">Manual</div>
+                  <div class="control-btn btn bg-white shadow rounded" id="humidity-auto">Auto</div>
+                </div>
+              </div>
+              <!-- control-sitting  -->
+              <div class="controls-sit thermo-sits">
+                <!-- manual  -->
+                <div class="form-check px-4 form-switch d-flex flex-column align-items-center control-content gap-2" id="humidity-manual-buttons">
+                  <div class="d-flex justify-content-between w-100">
+                    <input class="form-check-input" type="checkbox" id="humidifier" />
+                    <label class="form-check-label" for="humidifier">Humidifier</label>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <input class="form-check-input" type="checkbox" id="fan" />
+                    <label class="form-check-label" for="fan">Fan</label>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <input class="form-check-input" type="checkbox" id="hood" />
+                    <label class="form-check-label" for="hood">Hood</label>
                   </div>
                 </div>
-                <!-- control-sitting  -->
-                <div class="controls-sit .irrigation-content">
-                  <div
-                    class="form-check p-0 form-switch d-flex justify-content-around align-items-center gap-3 control-content irrigation-content" id="irrigation-btn"
-                  >
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="irrigationSwitch"
-                    />
-                    <label class="form-check-label" for="irrigationSwitch"
-                      >OFF</label
-                    >
-                  </div>
-                  <div class="mb-3 w-75 mx-auto control-content irrigation-content" id="auto-irrigation-btn">
-                    <input
-                      type="number"
-                      class="form-control"
-                      id="irrigationautovalue"
-                      value="25.9"
-                      disabled
-                    />
-                  </div>
+                <!-- auto  -->
+                <div class="mb-3 w-75 mx-auto control-content" id="auto-humidity-value">
+                  <input type="number" class="form-control" id="humidityAutoValue" value="25.9" />
                 </div>
-                <div
-                  class="degree my-3 d-flex justify-content-around align-items-center"
-                >
-                  <p class="fs-5">Sensor Reading:</p>
-                  <p class="fs-2 humidity">0</p>
-                </div>
+              </div>
+              <div class="degree my-3 d-flex justify-content-around align-items-center">
+                <p class="fs-5">Sensor Reading:</p>
+                <p class="fs-2 temperature">0</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
+        <!-- air Quality -->
+        <div class="col-sm-6 col-lg-4 mb-3 mb-sm-3">
+          <div class="card border-0 shadow h-100">
+            <div class="card-body">
+              <h5 class="card-title">
+                <i class="fa-solid fa-wind icon text-primary"></i>
+                Air Quality
+              </h5>
+              <div class="card-text my-3 d-flex justify-content-center align-items-center">
+                <div class="controls-btn btn-group gap-2" id="airQuality-btns">
+                  <div class="control-btn btn bg-white shadow rounded" id="airQuality-manual">Manual</div>
+                  <div class="control-btn btn bg-white shadow rounded" id="airQuality-auto">Auto</div>
+                </div>
+              </div>
+              <!-- control-sitting  -->
+              <div class="controls-sit thermo-sits">
+                <!-- manual  -->
+                <div class="form-check px-4 form-switch d-flex flex-column align-items-center control-content gap-2" id="airQuality-manual-buttons">
+                  <div class="d-flex justify-content-between w-100 d-none">
+                    <input class="form-check-input" type="checkbox" id="humidifier" />
+                    <label class="form-check-label" for="humidifier">Humidifier</label>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <input class="form-check-input" type="checkbox" id="fan" />
+                    <label class="form-check-label" for="fan">Fan</label>
+                  </div>
+                  <div class="d-flex justify-content-between w-100">
+                    <input class="form-check-input" type="checkbox" id="hood" />
+                    <label class="form-check-label" for="hood">Hood</label>
+                  </div>
+                </div>
+                <!-- auto  -->
+                <div class="mb-3 w-75 mx-auto control-content" id="auto-airQuality-value">
+                  <input type="number" class="form-control" id="humidityAutoValue" value="25.9" />
+                </div>
+              </div>
+              <div class="degree my-3 d-flex justify-content-around align-items-center">
+                <p class="fs-5">Sensor Reading:</p>
+                <p class="fs-2 temperature">0</p>
+              </div>
+            </div>
+          </div>
+        </div>
+  </div>
+</div>
+
     </div>
     <script src="js/bootstrap.js"></script>
     <script src="js/control.js" type="module"></script>
