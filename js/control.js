@@ -58,45 +58,40 @@ function addCheckboxListener(elementId, path) {
 function initializeSwitch(controlPath, elementId) {
   const element = document.getElementById(elementId);
   element.checked = controlData[controlPath.split('/')[1]]["manual-control"];
-  if(elementId == "leftMoisture"){
+  if (elementId == "leftMoisture") {
     element.checked = controlData[controlPath.split('/')[1]]["soil-moisture-left"]["manual-control"];
   }
 }
 
 function otherButtonListeners() {
   // fan button 
-  Array.from(document.querySelectorAll("#fan")).map((e)=>{
-    e.addEventListener("change", function() {
+  Array.from(document.querySelectorAll("#fan")).map((e) => {
+    e.addEventListener("change", function () {
       set(ref(database, "controls/y-fan-hood-control/fan-manual"), this.checked);
     });
-  })
+  });
 
   // Hood button
-  // document.getElementById("hood").addEventListener("change", function() {
-  //   set(ref(database, "controls/y-fan-hood-control/hood-manual"), this.checked);
-  // });
-  Array.from(document.querySelectorAll("#hood")).map((e)=>{
-    e.addEventListener("change", function() {
+  Array.from(document.querySelectorAll("#hood")).map((e) => {
+    e.addEventListener("change", function () {
       set(ref(database, "controls/y-fan-hood-control/hood-manual"), this.checked);
     });
-  })
+  });
 
   // Irrigation buttons
-  document.getElementById("rightMoisture").addEventListener("change", function() {
+  document.getElementById("rightMoisture").addEventListener("change", function () {
     set(ref(database, "controls/soil-moisture/soil-moisture-right/manual-control"), this.checked);
   });
 }
-function cehckForOtherbuttonListeners(){
 
-  Array.from(document.querySelectorAll("#fan")).map((e)=>{
+function checkForOtherButtonListeners() {
+  Array.from(document.querySelectorAll("#fan")).map((e) => {
     e.checked = controlData["controls/y-fan-hood-control/fan-manual".split('/')[1]]["fan-manual"];
-  })
+  });
 
-  Array.from(document.querySelectorAll("#hood")).map((e)=>{
+  Array.from(document.querySelectorAll("#hood")).map((e) => {
     e.checked = controlData["controls/y-fan-hood-control/hood-manual".split('/')[1]]["hood-manual"];
-  })
-  // const curtain = document.getElementById("hood");
-  // curtain.checked = controlData["controls/y-fan-hood-control/hood-manual".split('/')[1]]["hood-manual"];
+  });
 
   const waterDrain = document.getElementById("rightMoisture");
   waterDrain.checked = controlData["controls/soil-moisture/soil-moisture-right/manual-control".split('/')[1]]["soil-moisture-right"]["manual-control"];
@@ -105,6 +100,12 @@ function cehckForOtherbuttonListeners(){
 function sendValueToFirebase(id, path) {
   const autoValue = document.getElementById(id).value;
   set(ref(database, path), autoValue);
+}
+
+function getValueFromFirebase(id, path) {
+  fetchData(path, (data) => {
+    document.getElementById(id).value = data;
+  });
 }
 
 // Fetch and update readings
@@ -125,8 +126,8 @@ function setDataControl() {
       manualControlId: "tempHeater",
       manualControlPath: "controls/temperature/manual-control",
       // auto value 
-      autoControlId:"autoTemperatureValue",
-      autoControlPath:"controls/temperature/auto-value",
+      autoControlId: "autoTemperatureValue",
+      autoControlPath: "controls/temperature/auto-value",
     },
     {
       control: controlData["light"],
@@ -136,8 +137,8 @@ function setDataControl() {
       manualControlId: "lightSwitch",
       manualControlPath: "controls/light/manual-control",
       // auto value 
-      autoControlId:"lightautovalue",
-      autoControlPath:"controls/light/auto-value",
+      autoControlId: "lightautovalue",
+      autoControlPath: "controls/light/auto-value",
     },
     {
       control: controlData["soil-moisture"],
@@ -147,8 +148,8 @@ function setDataControl() {
       manualControlId: "leftMoisture",
       manualControlPath: "controls/soil-moisture/soil-moisture-left/manual-control",
       // auto value 
-      autoControlId:"soilMoistureAutoValue",
-      autoControlPath:"controls/soil-moisture/auto-value",
+      autoControlId: "soilMoistureAutoValue",
+      autoControlPath: "controls/soil-moisture/auto-value",
     },
     {
       control: controlData["humidity"],
@@ -158,8 +159,8 @@ function setDataControl() {
       manualControlId: "humidifier",
       manualControlPath: "controls/humidity/manual-control",
       // auto value 
-      autoControlId:"humidityAutoValue",
-      autoControlPath:"controls/humidity/auto-value",
+      autoControlId: "humidityAutoValue",
+      autoControlPath: "controls/humidity/auto-value",
     },
     {
       control: controlData["Air Quality"],
@@ -169,25 +170,29 @@ function setDataControl() {
       manualControlId: "humidifier",
       manualControlPath: "controls/humidity/manual-control",
       // auto value 
-      autoControlId:"humidityAutoValue",
-      autoControlPath:"controls/Air Quality/auto-value",
+      autoControlId: "humidityAutoValue",
+      autoControlPath: "controls/Air Quality/auto-value",
     }
   ];
 
-  controls.forEach(({ control, elements, autoPath, manualControlId, manualControlPath ,autoControlId,autoControlPath }) => {
+  controls.forEach(({ control, elements, autoPath, manualControlId, manualControlPath, autoControlId, autoControlPath }) => {
     updateControlState(control, elements);
     addClickListener(elements.auto, autoPath, true, elements);
     addClickListener(elements.manual, autoPath, false, elements);
     // manual btn 
     addCheckboxListener(manualControlId, manualControlPath);
     initializeSwitch(manualControlPath, manualControlId);
-    // send auto value
-    sendValueToFirebase(autoControlId, autoControlPath);
+    // Fetch and display auto value
+    getValueFromFirebase(autoControlId, autoControlPath);
+    // Update Firebase on change of auto value
+    document.getElementById(autoControlId).addEventListener("input", function () {
+      sendValueToFirebase(autoControlId, autoControlPath);
+    });
   });
 
   // other buttons 
   otherButtonListeners();
-  cehckForOtherbuttonListeners()
+  checkForOtherButtonListeners();
 }
 
 // Fetch data at intervals
@@ -204,4 +209,4 @@ function initializeDataFetching() {
 
 // Initialize
 initializeDataFetching();
-setInterval(initializeDataFetching, 1000);
+setInterval(initializeDataFetching, 3000);
